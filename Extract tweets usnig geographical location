@@ -1,0 +1,27 @@
+
+
+
+import tweepy
+import csv
+ACCESS_TOKEN = ""
+ACCESS_SECRET = ""
+CONSUMER_KEY = ""
+CONSUMER_SECRET = ""
+
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
+
+api = tweepy.API(auth)
+api.wait_on_rate_limit = True
+api.wait_on_rate_limit_notify = True
+
+csvFile = open('IndiaApple.csv', 'a')
+csvWriter = csv.writer(csvFile)
+
+for tweet in tweepy.Cursor(api.search, q='#@Apple' , lang= 'en',geocode='17.570317361919994,76.78138907827383,2439.54km').items():
+ print(tweet.created_at, tweet.text, tweet.user.id , tweet.user.followers_count)
+ csvWriter.writerow([tweet.created_at, tweet.text.encode('utf-8')])
+
+csvFile.close()
+
+# ,''' geocode='17.570317361919994,76.78138907827383,100km'''
